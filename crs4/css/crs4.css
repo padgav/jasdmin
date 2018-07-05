@@ -1,0 +1,24 @@
+#crs4loginform{
+    display: none;
+}
+
+#crs4maincontainer{
+    display: none;
+}
+
+
+th {
+    text-align: center;
+}
+
+table tbody button{
+    display: none;
+}
+table tbody tr:hover button{
+    display: block;
+}
+
+#crs4notes{
+    overflow-y: auto;
+    height: 400px;
+}
