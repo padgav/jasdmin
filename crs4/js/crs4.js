@@ -1,7 +1,7 @@
 
-function sereverRequest(params, callback){
+function serverRequest(params, callback, url = "crs4/table.php"){
     var httpc = new XMLHttpRequest(); // simplified for clarity
-    var url = "crs4/table.php";
+    //var url = "crs4/table.php";
     httpc.open("POST", url, true); // sending as POST
 
     httpc.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -21,7 +21,7 @@ function sereverRequest(params, callback){
 function logout(){
 
     params = "cmd=logout";
-    sereverRequest(params, function(obj){
+    serverRequest(params, function(obj){
         console.log(obj);
             if(obj.status.code==105){
                 location.reload();
@@ -33,7 +33,7 @@ var uidnumber;
 function init(){
 
     params = "cmd=getUserInfo";
-    sereverRequest(params, function(obj){
+    serverRequest(params, function(obj){
 
         console.log(obj);
         if(obj.status.code == 102) $("#crs4loginform").show();
@@ -58,7 +58,7 @@ function init(){
         document.getElementById("crs4notestext").value = "";
         
         var params = "cmd=insert&table=notes&field[]=id_persona&field[]=id_progetto&field[]=testo&value[]=" + userid  + "&value[]=" +  projectid + "&value[]=" + text;
-        sereverRequest(params, function(obj){
+        serverRequest(params, function(obj){
 
             getNotes(projectid);
 
@@ -72,7 +72,7 @@ function init(){
         var password = document.getElementById("crs4password").value;
 
         params = "cmd=login&username=" + username + "&password=" + password;
-        sereverRequest(params, function(obj){
+        serverRequest(params, function(obj){
             console.log(obj);
             if(obj.status.code == 102) {
                 $("#crs4loginform").show();
@@ -101,7 +101,10 @@ serialize = function(obj) {
   }
 
 function aggiornaore(ore, obj) {
+console.log("obj", obj)
+    obj.oldore = obj.ore; 
     obj.ore = ore;
+    var event = new CustomEvent("crs4budgetchanged", { detail: obj })
     //console.log("chiamo aggiornaore",  obj);
 
     params = serialize(obj);
@@ -119,11 +122,11 @@ function aggiornaore(ore, obj) {
             
             document.getElementById("status").innerHTML=obj.status;
             if(obj.status!="OK"){
-                document.getElementById("status").className="error";
+                document.getElementById("status").className="bg-danger";
             }
             else{
-                document.getElementById("status").className="ok";
-                console.log("sono qui", obj);
+                document.getElementById("mytable").dispatchEvent(event);
+                document.getElementById("status").className="bg-success";
                 document.getElementById("costoprogetto").innerHTML = obj.tot;
 
 
@@ -184,7 +187,7 @@ function aggiornaore(ore, obj) {
 function getProjects(){
     params = "cmd=getTableJoin&table=progetti&join_field=id_responsabile&join_table=persone&join_show=nome,cognome";
     console.log(params)
-    sereverRequest(params, function(obj){
+    serverRequest(params, function(obj){
         console.log("projects", obj);
         projects.createTable(obj.data);
 
@@ -226,7 +229,7 @@ function getNotes(id){
 
 
     var params = "cmd=select&table=Notes&field=id_progetto&value=" + id;
-    sereverRequest(params, function(obj){
+    serverRequest(params, function(obj){
         console.log(obj);
         $("#crs4notesitem").parent().children().not(':first').remove("a");
         $("#crs4notestext").data("projectid", id);
@@ -347,6 +350,7 @@ mytable.createTable = function(conf){
         var el = document.getElementById(idstring);
         if(el != null){
             el.innerHTML = conf.data[i].ore;
+            el.dataset.ore = conf.data[i].ore;
             el.dataset['id'] = conf.data[i].PID;
         }
         

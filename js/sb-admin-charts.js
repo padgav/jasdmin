@@ -1,15 +1,61 @@
-// Chart.js scripts
-// -- Set new default font family and font color to mimic Bootstrap's default styling
+
+var datagraph;
+var myLineChart;
+var ore = Array();
+
+
+document.getElementById("mytable").addEventListener("crs4budgetchanged", function(e){
+
+  ///chart.data.labels.pop();
+  myLineChart.data.datasets.forEach((dataset) => {
+      dataset.data.pop();
+  });
+  myLineChart.update();
+
+  var event = new CustomEvent("crs4projectselected", {detail: e.detail.prid})
+
+document.getElementById("projects").dispatchEvent(event);
+
+
+})
+
+
+
+document.getElementById("projects").addEventListener("crs4projectselected", function(e){
+  
+  //console.log("event", e);
+  var params="projectid=" + e.detail;
+
+
+  
+  serverRequest(params, function(obj){
+
+  
+
+var labels = Array();
+var massimo = 0;
+datagraph = obj.data;
+  for(i = 0; i< obj.data.length; i++){
+    var o  = parseInt(obj.data[i].ore);
+    ore.push(o);
+    labels.push(obj.data[i].mese + " " + obj.data[i].anno );
+    if(o > massimo) {
+      massimo = o;
+    }
+  }
+
+
+
 Chart.defaults.global.defaultFontFamily = '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
 Chart.defaults.global.defaultFontColor = '#292b2c';
 // -- Area Chart Example
 var ctx = document.getElementById("myAreaChart");
-var myLineChart = new Chart(ctx, {
+ myLineChart = new Chart(ctx, {
   type: 'line',
   data: {
-    labels: ["Mar 1", "Mar 2", "Mar 3", "Mar 4", "Mar 5", "Mar 6", "Mar 7", "Mar 8", "Mar 9", "Mar 10", "Mar 11", "Mar 12", "Mar 13"],
+    labels: labels,
     datasets: [{
-      label: "Sessions",
+      label: "Preventivo",
       lineTension: 0.3,
       backgroundColor: "rgba(2,117,216,0.2)",
       borderColor: "rgba(2,117,216,1)",
@@ -20,8 +66,12 @@ var myLineChart = new Chart(ctx, {
       pointHoverBackgroundColor: "rgba(2,117,216,1)",
       pointHitRadius: 20,
       pointBorderWidth: 2,
-      data: [10000, 30162, 26263, 18394, 18287, 28682, 31274, 33259, 25849, 24159, 32651, 31984, 38451],
-    }],
+      data: ore,
+    }
+    
+  
+  
+  ],
   },
   options: {
     scales: {
@@ -30,7 +80,7 @@ var myLineChart = new Chart(ctx, {
           unit: 'date'
         },
         gridLines: {
-          display: false
+          display: true
         },
         ticks: {
           maxTicksLimit: 7
@@ -39,7 +89,7 @@ var myLineChart = new Chart(ctx, {
       yAxes: [{
         ticks: {
           min: 0,
-          max: 40000,
+          max: massimo,
           maxTicksLimit: 5
         },
         gridLines: {
@@ -48,10 +98,14 @@ var myLineChart = new Chart(ctx, {
       }],
     },
     legend: {
-      display: false
+      display: true
     }
   }
 });
+}, "crs4/graph.php");
+
+});
+
 // -- Bar Chart Example
 // var ctx = document.getElementById("myBarChart");
 // var myLineChart = new Chart(ctx, {

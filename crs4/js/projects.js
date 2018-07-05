@@ -54,7 +54,9 @@ projects.createTable = function(obj){
         var costo = obj[i].COSTO;
         tr.addEventListener("click", function(){
            getBudget(this.dataset.cdc);
-           getNotes(this.dataset.id)
+           getNotes(this.dataset.id);
+           var event = new CustomEvent('crs4projectselected', { detail: this.dataset.id });
+           div.dispatchEvent(event);
         });
 
         var fields =["ACRONIMO", "CDC", "COSTO", "START", "END", "ID_RESPONSABILE"]
@@ -68,7 +70,7 @@ projects.createTable = function(obj){
             
             td.addEventListener("blur", function(e){ 
                 params = "cmd=update&table=progetti&field=" + this.dataset.field + "&value=" + this.innerHTML + "&id=" + this.dataset.id;
-                sereverRequest(params, function(obj){
+                serverRequest(params, function(obj){
 
                 });
             })
@@ -79,7 +81,7 @@ projects.createTable = function(obj){
                 text = document.createElement("input");
                 text.addEventListener("change", function(e){ 
                     params = "cmd=update&table=progetti&field=" + this.dataset.field + "&value=" + this.value + "&id=" + this.dataset.id;
-                    sereverRequest(params, function(obj){
+                    serverRequest(params, function(obj){
 
                     });
                 })
