@@ -7,6 +7,7 @@ var ore = Array();
 document.getElementById("mytable").addEventListener("crs4budgetchanged", function(e){
 
   ///chart.data.labels.pop();
+  myLineChart.data.labels.pop();
   myLineChart.data.datasets.forEach((dataset) => {
       dataset.data.pop();
   });
@@ -14,10 +15,11 @@ document.getElementById("mytable").addEventListener("crs4budgetchanged", functio
 
   var event = new CustomEvent("crs4projectselected", {detail: e.detail.prid})
 
-document.getElementById("projects").dispatchEvent(event);
+   document.getElementById("projects").dispatchEvent(event);
 
 
 })
+
 
 
 
