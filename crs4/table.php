@@ -202,6 +202,41 @@ elseif($cmd == "addRow"){
     print json_encode($out); 
 }
 
+elseif($cmd == "delete"){
+    $table = $VARS["table"];
+    $value = $VARS["value"];
+    $sql = "delete from $table where id = '$value'";
+    if ($conn->query($sql) === TRUE) {
+        $out["status"]["message"]= "OK";
+        $out["status"]["code"]= "100";
+    } else {
+        $out["status"]["message"] = "Error inserting record: " . $conn->error;
+        $out["status"]["code"]= "9004";
+    }
+    print json_encode($out); 
+
+}
+
+elseif($cmd == "autocomplete"){
+    $table = $VARS["table"];
+    $field = $VARS["field"];
+    $sql = "select  $field as label from $table" ;
+    $result = $conn->query($sql);
+    $data = array();
+    if($result === FALSE) {
+        //$out["status"]["code"] = 9001;
+    }
+    else{
+        while($row = $result->fetch_assoc()) {
+            $data[] = $row["label"];
+        }
+       
+        //$out["status"]["code"] = 100;
+    }
+    print json_encode($data); 
+
+}
+
 
 $conn->close();
 

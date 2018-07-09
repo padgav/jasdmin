@@ -45,6 +45,7 @@ else if($cmd == "newproject"){
     $out = array();
     if ($conn->query($sql) === TRUE) {
         $out['status'] = "OK";
+        $out['data']['insert_id'] = $conn->insert_id;
     } else {
         $out['status'] = "Error insert new project: " . $conn->error;
     }

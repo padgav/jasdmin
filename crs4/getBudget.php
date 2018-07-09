@@ -2,7 +2,7 @@
 
 
 include 'dbconfig.php';
-$cdc=$_POST["cdc"];
+$id=$_POST["id"];
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
 // Check connection
@@ -11,7 +11,7 @@ if ($conn->connect_error) {
 }
 
 
-$sql = "SELECT ID, ACRONIMO, CDC, COSTO, START, END from progetti  where CDC = '$cdc'";
+$sql = "SELECT ID, ACRONIMO, CDC, COSTO, START, END from progetti  where id = '$id'";
 //print $sql;
 $result = $conn->query($sql);
 if ($result->num_rows > 0) {
