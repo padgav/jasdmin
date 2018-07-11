@@ -30,10 +30,10 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarResponsive">
       <ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
-        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Dashboard">
+        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Budget">
           <a class="nav-link" href="index.html">
-            <i class="fa fa-fw fa-dashboard"></i>
-            <span class="nav-link-text">Dashboard</span>
+            <i class="fa fa-fw fa-table"></i>
+            <span class="nav-link-text">Budget</span>
           </a>
         </li>
         <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Charts">
@@ -42,10 +42,10 @@
             <span class="nav-link-text">Charts</span>
           </a>
         </li>
-        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Tables">
-          <a class="nav-link" href="tables.html">
-            <i class="fa fa-fw fa-table"></i>
-            <span class="nav-link-text">Tables</span>
+        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Personale">
+          <a id="crs4personale" class="nav-link" >
+            <i class="fa fa-fw fa-user"></i>
+            <span class="nav-link-text">Personale</span>
           </a>
         </li>
         <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Components">
@@ -244,7 +244,7 @@
       </ol>
       <!-- Icon Cards-->
 
-      <input id="autocomplete">pippo</input>
+      <div id="crs4budget">
       <div class="card mb-3">
         <div class="card-header">
           <i class="fa fa-book"></i> Projects</div>
@@ -254,6 +254,7 @@
         </div>
         <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
       </div>
+    
 
       <div class="card mb-3">
         <div class="card-header">
@@ -380,10 +381,11 @@
           </div>
         </div>
       </div>
+   
       <!-- Example DataTables Card-->
      
           <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
-        </div>
+        
         <div class="card mb-3">
             <div class="card-header">
               <i class="fa fa-bar-chart"></i> Bar Chart Example</div>
@@ -406,7 +408,60 @@
             </div>
             <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
           </div>
+        </div>
 
+        <div id="crs4personale">
+            <div class="card mb-3">
+                <div class="card-header">
+                  <i class="fa fa-table"></i> Personale</div>
+                <div class="card-body">
+                  <div class="table-responsive">
+                    <table class="table table-bordered" id="personale" width="100%" cellspacing="0">
+                      <thead>
+                        <tr>
+                          <th>Name</th>
+                          <th>Cognome</th>
+                          <th>Codice Fiscale</th>
+                          <th>Data di Nascita</th>
+                          <th>Comune di Nascita</th>
+                          <th>Tipo di contratto</th> 
+                          <th>Inizio Contratto</th>
+                          <th>Fine Contratto</th>
+                        </tr>
+                      </thead>
+                      <tfoot>
+                        <tr>
+                            <th>Name</th>
+                            <th>Cognome</th>
+                            <th>Codice Fiscale</th>
+                            <th>Data di Nascita</th>
+                            <th>Comune di Nascita</th>
+                            <th>Tipo di contratto</th> 
+                            <th>Inizio Contratto</th>
+                            <th>Fine Contratto</th>
+                        </tr>
+                      </tfoot>
+                      <tbody id="crs4personalebody">
+                        <tr>
+                          <td>Tiger Nixon</td>
+                          <td>System Architect</td>
+                          <td>Edinburgh</td>
+                          <td>61</td>
+                          <td>2011/04/25</td>
+                          <td>$320,800</td>
+                          <td>2011/04/25</td>
+                          <td>$320,800</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+              </div>
+        </div>
+
+
+        </div>
       </div>
 
 
@@ -494,6 +549,7 @@
     <script type="text/javascript" src="crs4/js/projects.js"></script>
     <script type="text/javascript" src="crs4/js/notes.js"></script>
     <script type="text/javascript" src="crs4/js/budget.js"></script>
+    <script type="text/javascript" src="crs4/js/hr.js"></script>
     <script src="js/sb-admin-charts.js"></script>
   </div>
 </body>

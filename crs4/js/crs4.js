@@ -50,26 +50,6 @@ $(document).ready(function () {
     // Handler for .ready() called.
 
 
-    var url = "crs4/table.php?table=persone&cmd=autocomplete&field=nome";
-    $("#autocomplete").autocomplete({
-        source: url,
-        minChars: 2,
-        autoFill: true,
-        mustMatch: false,
-        delay: 0,
-        cacheLength: 1,
-        max: 3,
-        select: function(event, ui) {
-            event.preventDefault();
-            $("#autocomplete").val(ui.item.label);
-        },
-        focus: function(event, ui) {
-            event.preventDefault();
-            $("#autocomplete").val(ui.item.label);
-            
-        }
-    });
-
     var params = "cmd=getUserInfo";
 
     serverRequest(params, function (obj) {
@@ -107,6 +87,14 @@ $(document).ready(function () {
     })
 
 
+    document.getElementById("crs4personale").addEventListener("click", function(e){
+        $("#crs4budget").hide();
+        $("#crs4personale").show();
+        
+        var personale = new JasdminHr("crs4personalebody");
+        
+
+    })
 
 
     document.getElementById("crs4login").addEventListener("click", function (e) {

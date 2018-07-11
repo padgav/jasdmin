@@ -221,7 +221,7 @@ elseif($cmd == "autocomplete"){
     $table = $VARS["table"];
     $field = $VARS["field"];
     $term = $VARS["term"];
-    $sql = "select id as value,  CONCAT(nome, ' ', cognome)  as label from $table where nome like '$term%' OR cognome like '$term%'" ;
+    $sql = "select id as value,  CONCAT(nome, ' ', cognome)  as label from $table where nome like '%$term%' OR cognome like '%$term%'" ;
     $result = $conn->query($sql);
     $data = array();
     if($result === FALSE) {

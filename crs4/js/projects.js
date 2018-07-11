@@ -101,7 +101,7 @@ JasdminProject.prototype.addRow = function (obj) {
                 text = document.createElement("input");
                 text.value = obj.nome + " " + obj.cognome;
                 text.disabled = true;
-                td.id = "resp" + obj.ID;
+                text.id = "resp" + obj.ID;
             }
 
             else text = document.createTextNode(obj[field]);
@@ -159,6 +159,11 @@ JasdminProject.prototype.addRow = function (obj) {
 
     butt2.addEventListener("click", function (e) {
         var url = "crs4/table.php?table=persone&cmd=autocomplete&field=nome";
+         var prid = this.dataset.id;;
+         var myelement = this;
+         
+        $("#resp" + this.dataset.id).prop('disabled', false);
+        $("#resp" + this.dataset.id).select();
         $("#resp" + this.dataset.id).autocomplete({
             source: url,
             minChars: 2,
@@ -169,11 +174,11 @@ JasdminProject.prototype.addRow = function (obj) {
             max: 3,
             select: function (event, ui) {
                 event.preventDefault();
-                $("#autocomplete").val(ui.item.label);
-                text.innerHTML = ui.item.label;
-                params = "cmd=update&table=progetti&field=id_responsabile&value=" + ui.item.value + "&id=" + butt2.dataset.id;
-                var projectid = this.dataset.id;
-                $("#autocomplete").detach();
+                
+                //alert(ui.item.value);
+                params = "cmd=update&table=progetti&field=id_responsabile&value=" + ui.item.value + "&id=" + prid;
+                $(this).val(ui.item.label);
+                $("#resp" + myelement.dataset.id).prop('disabled', true);
                 serverRequest(params, function (obj) {
 
 
@@ -182,7 +187,7 @@ JasdminProject.prototype.addRow = function (obj) {
             },
             focus: function (event, ui) {
                 event.preventDefault();
-                $("#autocomplete").val(ui.item.label);
+                $(this).val(ui.item.label);
 
             }
         });
