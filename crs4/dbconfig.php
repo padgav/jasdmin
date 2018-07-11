@@ -2,7 +2,7 @@
 
 $servername = "127.0.0.1";
 $username = "root";
-$password = "mysql123";
+$password = "Pippo2003";
 $dbname = "test";
 
 ?>

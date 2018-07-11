@@ -220,7 +220,8 @@ elseif($cmd == "delete"){
 elseif($cmd == "autocomplete"){
     $table = $VARS["table"];
     $field = $VARS["field"];
-    $sql = "select  $field as label from $table" ;
+    $term = $VARS["term"];
+    $sql = "select id as value,  CONCAT(nome, ' ', cognome)  as label from $table where nome like '$term%' OR cognome like '$term%'" ;
     $result = $conn->query($sql);
     $data = array();
     if($result === FALSE) {
@@ -228,7 +229,7 @@ elseif($cmd == "autocomplete"){
     }
     else{
         while($row = $result->fetch_assoc()) {
-            $data[] = $row["label"];
+            $data[] = $row;
         }
        
         //$out["status"]["code"] = 100;

@@ -20,6 +20,15 @@ function serverRequest(params, callback, url = "crs4/table.php") {
 
 }
 
+serialize = function (obj) {
+    var str = [];
+    for (var p in obj)
+        if (obj.hasOwnProperty(p)) {
+            str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+        }
+    return str.join("&");
+}
+
 
 function logout() {
 
@@ -50,24 +59,15 @@ $(document).ready(function () {
         delay: 0,
         cacheLength: 1,
         max: 3,
-        formatItem: function (row) {
-            return row[0] + " (" + row[2] + ", " + row[1] + ")" + " " + row[5];
+        select: function(event, ui) {
+            event.preventDefault();
+            $("#autocomplete").val(ui.item.label);
         },
-        formatMatch: function (row) {
-            return row[0];
-        },
-        formatResult: function (row) {
-            return row[0];
-        },
-        select: function (event, ui) {
-            //add(event, ui);
-            //utilizzare questo spazio per valorizzare ad esempio dei campi input con altri dati prelevati da db
-            //$("#campo_nascosto").val(ui.item.nome_campo_array_settato_in_lista-utenti);
+        focus: function(event, ui) {
+            event.preventDefault();
+            $("#autocomplete").val(ui.item.label);
+            
         }
-
-
-
-
     });
 
     var params = "cmd=getUserInfo";
@@ -135,14 +135,7 @@ $(document).ready(function () {
 });
 
 
-serialize = function (obj) {
-    var str = [];
-    for (var p in obj)
-        if (obj.hasOwnProperty(p)) {
-            str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
-        }
-    return str.join("&");
-}
+
 
 function aggiornaore(ore, obj) {
     console.log("obj", obj)
@@ -169,52 +162,52 @@ function aggiornaore(ore, obj) {
                 document.getElementById("status").className = "bg-danger";
             }
             else {
-                document.getElementById("mytable").dispatchEvent(event);
+                //document.getElementById("mytable").dispatchEvent(event);
                 document.getElementById("status").className = "bg-success";
                 document.getElementById("costoprogetto").innerHTML = obj.tot;
 
 
-                var ctx = document.getElementById("myBarChart");
-                var myLineChart = new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: ["Tempo Determinato", "Tempo Indeterminato"],
-                        datasets: [{
-                            label: "Costi",
-                            backgroundColor: "rgba(2,117,216,1)",
-                            borderColor: "rgba(2,117,216,1)",
-                            data: [obj.data[0].costi, obj.data[1].costi],
-                        }],
-                    },
-                    options: {
-                        scales: {
-                            xAxes: [{
-                                time: {
-                                    unit: 'month'
-                                },
-                                gridLines: {
-                                    display: false
-                                },
-                                ticks: {
-                                    maxTicksLimit: 6
-                                }
-                            }],
-                            yAxes: [{
-                                ticks: {
-                                    min: 0,
-                                    max: 50000,
-                                    maxTicksLimit: 5
-                                },
-                                gridLines: {
-                                    display: true
-                                }
-                            }],
-                        },
-                        legend: {
-                            display: false
-                        }
-                    }
-                });
+                // var ctx = document.getElementById("myBarChart");
+                // var myLineChart = new Chart(ctx, {
+                //     type: 'bar',
+                //     data: {
+                //         labels: ["Tempo Determinato", "Tempo Indeterminato"],
+                //         datasets: [{
+                //             label: "Costi",
+                //             backgroundColor: "rgba(2,117,216,1)",
+                //             borderColor: "rgba(2,117,216,1)",
+                //             data: [obj.data[0].costi, obj.data[1].costi],
+                //         }],
+                //     },
+                //     options: {
+                //         scales: {
+                //             xAxes: [{
+                //                 time: {
+                //                     unit: 'month'
+                //                 },
+                //                 gridLines: {
+                //                     display: false
+                //                 },
+                //                 ticks: {
+                //                     maxTicksLimit: 6
+                //                 }
+                //             }],
+                //             yAxes: [{
+                //                 ticks: {
+                //                     min: 0,
+                //                     max: 50000,
+                //                     maxTicksLimit: 5
+                //                 },
+                //                 gridLines: {
+                //                     display: true
+                //                 }
+                //             }],
+                //         },
+                //         legend: {
+                //             display: false
+                //         }
+                //     }
+                // });
 
 
 
