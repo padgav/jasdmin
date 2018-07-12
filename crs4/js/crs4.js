@@ -91,7 +91,7 @@ $(document).ready(function () {
         $("#crs4budget").hide();
         $("#crs4personale").show();
         
-        var personale = new JasdminHr("crs4personalebody");
+        var personale = new JasdminHr("crs4personalebody", "crs4personaleaggiungi", "crs4personaleaggiungibutton");
         
 
     })

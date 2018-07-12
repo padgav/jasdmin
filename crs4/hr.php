@@ -35,6 +35,7 @@ if ($cmd=='getTable') {
         }
         $out["data"] = $data;
         $out["status"]["code"] = 100;
+        $out["status"]["message"] = "OK";
     }
     print json_encode($out); 
 }
@@ -86,12 +87,21 @@ elseif ($cmd=='update') {
     }
     else {
         $out["status"]["code"] = 100;
+        $out["status"]["message"] = "OK";
     }
     print json_encode($out); 
 }
 
 elseif ($cmd=="new") {
     $cf= $VARS["cf"];
+
+    if(strlen($cf)!= 16) {
+        $out["status"]["code"] = 9016;
+        $out["status"]["message"] = "codice fiscale non valido:lenght";
+        print json_encode($out); 
+        exit(1);
+        
+    }
 
     $url = "http://webservices.dotnethell.it/codicefiscale.asmx/ControllaCodiceFiscale?CodiceFiscale=$cf";
     $xml = file_get_contents($url);
@@ -134,6 +144,7 @@ elseif ($cmd=="new") {
         }
         else {
             $out["status"]["code"] = 100;
+            $out["status"]["message"] = "OK";
             $last_id = $conn->insert_id;
             $out["id"]=$last_id;
         }
@@ -156,6 +167,7 @@ elseif ($cmd=="delete") {
     }
     else {
         $out["status"]["code"] = 100;
+        $out["status"]["message"] = "OK";
        
     }
     print json_encode($out); 
