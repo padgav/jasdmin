@@ -85,6 +85,7 @@ if($cmd == "getTable"){
     $result = $conn->query($sql);
     if($result === FALSE) {
         $out["status"]["code"] = 9001;
+        $out["status"]["message"] = $conn->error;
     }
     else{
         while($row = $result->fetch_assoc()) {
@@ -92,6 +93,7 @@ if($cmd == "getTable"){
         }
         $out["data"] = $data;
         $out["status"]["code"] = 100;
+        $out["status"]["message"] = "OK";
     }
     print json_encode($out); 
 }
@@ -106,6 +108,7 @@ elseif($cmd =="getTableJoin"){
     $result = $conn->query($sql);
     if($result === FALSE) {
         $out["status"]["code"] = 9001;
+        $out["status"]["message"] = $conn->error;
     }
     else{
         while($row = $result->fetch_assoc()) {
@@ -113,6 +116,7 @@ elseif($cmd =="getTableJoin"){
         }
         $out["data"] = $data;
         $out["status"]["code"] = 100;
+        $out["status"]["message"] = "OK";
     }
     print json_encode($out); 
 
@@ -141,6 +145,7 @@ elseif($cmd == "select"){
     $result = $conn->query($sql);
     if($result === FALSE) {
         $out["status"]["code"] = 9001;
+        $out["status"]["message"] = $conn->error;
     }
     else{
         while($row = $result->fetch_assoc()) {
@@ -148,6 +153,7 @@ elseif($cmd == "select"){
         }
         $out["data"] = $data;
         $out["status"]["code"] = 100;
+        $out["status"]["message"] = "OK";
     }
     print json_encode($out); 
 }

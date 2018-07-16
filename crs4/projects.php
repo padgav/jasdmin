@@ -44,10 +44,12 @@ else if($cmd == "newproject"){
     $sql = "insert into  Progetti (cdc) values( $cdc)";
     $out = array();
     if ($conn->query($sql) === TRUE) {
-        $out['status'] = "OK";
+        $out['status']["message"] = "OK";
+        $out['status']["code"] = 100;
         $out['data']['insert_id'] = $conn->insert_id;
     } else {
-        $out['status'] = "Error insert new project: " . $conn->error;
+        $out['status']["message"] = "Error insert new project: " . $conn->error;
+        $out['status']["code"] = 9000;
     }
 
 }

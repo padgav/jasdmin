@@ -44,7 +44,9 @@ function JasdminNotes(conf){
             var text = newitem.find("p");
             text.html(obj.data[i].TESTO);
             var date = newitem.find(".notesdate");
-            date.html(obj.data[i].DATA);
+
+            date.html(moment(obj.data[i].DATA).fromNow())
+            //date.html(obj.data[i].DATA);
             $("#crs4notesitem").after(newitem);
             newitem.show();
 

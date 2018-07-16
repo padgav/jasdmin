@@ -4,8 +4,12 @@ function JasdminProject(elementid) {
     params = "cmd=getTableJoin&table=progetti&join_field=id_responsabile&join_table=persone&join_show=nome,cognome";
     console.log(params)
     serverRequest(params, function (obj) {
-        console.log("projects", obj);
-        self.createTable(obj.data);
+        console.log(obj);
+        if(obj.status.code == "100"){
+            self.createTable(obj.data);
+        }
+        document.getElementById("crs4projectstatus").innerHTML = obj.status.message;
+        
     });
 }
 
@@ -50,10 +54,13 @@ JasdminProject.prototype.addRow = function (obj) {
     var self = this;
     var tr = document.createElement('tr');
     var costo = obj.COSTO;
-    this.allcdc.push(obj.CDC)
+    this.allcdc.push(obj.CDC);
     tr.addEventListener("click", function () {
+        $(self.selected).removeClass("projectselectd");
+        $(this).addClass("projectselectd");
         var event = new CustomEvent('crs4projectselected', { detail: this.dataset.id });
         self.div.dispatchEvent(event);
+        self.selected = this;
     });
 
     var fields = ["ACRONIMO", "CDC", "COSTO", "START", "END", "ID_RESPONSABILE"]
@@ -71,7 +78,7 @@ JasdminProject.prototype.addRow = function (obj) {
             var event = new CustomEvent('crs4projectsupdated', { detail: this.dataset.id });
             self.div.dispatchEvent(event);
             serverRequest(params, function (obj) {
-
+                document.getElementById("crs4projectstatus").innerHTML = obj.status.message;
             });
         })
 
@@ -86,6 +93,7 @@ JasdminProject.prototype.addRow = function (obj) {
 
                     var event = new CustomEvent('crs4projectsupdated', { detail: projectid });
                     self.div.dispatchEvent(event);
+                    document.getElementById("crs4projectstatus").innerHTML = obj.status.message;
 
                 });
             })
@@ -152,6 +160,7 @@ JasdminProject.prototype.addRow = function (obj) {
         var deleterow = this.dataset.id;
         serverRequest(params, function (obj) {
             $("tr[data-id='" + deleterow + "']").remove();
+            document.getElementById("crs4projectstatus").innerHTML = obj.status.message;
         });
         var event = new CustomEvent('crs4projectsrowdeleted', { detail: this.dataset.id });
         self.dispatchEvent(event);
@@ -181,7 +190,7 @@ JasdminProject.prototype.addRow = function (obj) {
                 $("#resp" + myelement.dataset.id).prop('disabled', true);
                 serverRequest(params, function (obj) {
 
-
+                    document.getElementById("crs4projectstatus").innerHTML = obj.status.message;
 
                 });
             },
@@ -292,13 +301,14 @@ JasdminProject.prototype.createTable = function (obj) {
 
         params = "cmd=newproject&cdc=" + inputcdc.value;
         serverRequest(params, function (obj) {
-            if (obj.status == "OK") {
-                self.addRow({ ID: obj.data.insert_id, CDC: inputcdc.value, ACRONIMO: "Nuovo" });
+            if (obj.status.code == 100) {
+                self.addRow({ ID: obj.data.insert_id, CDC: inputcdc.value, ACRONIMO: "Acronimo" });
                 self.allcdc.push(inputcdc.value);
                 inputcdc.value = "";
             }
+            document.getElementById("crs4projectstatus").innerHTML = obj.status.message;
 
-        }, "crs4/getProjects.php");
+        }, "crs4/projects.php");
     });
 
 

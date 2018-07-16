@@ -22,3 +22,7 @@ table tbody tr:hover button{
     overflow-y: auto;
     height: 400px;
 }
+
+.projectselectd{
+    color: blue;
+}
