@@ -35,6 +35,17 @@ if($cmd == "getUserInfo"){
 }
 
 
+// Create connection
+$conn = new mysqli($servername, $username, $password, $dbname);
+// Check connection
+if ($conn->connect_error) {
+    $out["status"]["message"] = "Connection failed: " . $conn->connect_error;
+    $out["status"]["code"] = 9000;
+    print json_encode($out); 
+    $conn->close();
+    exit(1);
+}
+
 if($cmd == "login"){
     $user = $VARS["username"];
     $password = $VARS["password"];
@@ -49,32 +60,82 @@ if($cmd == "login"){
         $out["status"]["message"] = "Login Successful";
         $_SESSION["cn"] = $data[0]["cn"][0];
         $_SESSION["uidnumber"] = $data[0]["uidnumber"][0];
+        $ldapnumber = $data[0]["uidnumber"][0];
+
+        $sql = "select id from persone where ldap = $ldapnumber";
+        $result = $conn->query($sql);
+        $row = $result->fetch_assoc();
+        $uid = $_SESSION["uid"] = $row["id"];
+
+
+        //get project where user is leader
+        $sql = "select id from progetti where id_responsabile = $uid";
+        $result = $conn->query($sql);
+        $data = array();
+        while($row = $result->fetch_assoc()) {
+            $data[] = $row;
+        }
+        $_SESSION["projects"] = $data;
+
+        
 
         $out["data"]["uidnumber"] =  $_SESSION["uidnumber"];
         $out["data"]["cn"] =  $_SESSION["cn"];
         $out["data"]["ldpap"] = $data ;
+
+
+        //get user roles
+        $sql = "select id_ruolo from ruser where id_persona = $uid";
+        $result = $conn->query($sql);
+        $roles = array();
+        while($row = $result->fetch_assoc()) {
+            $roles[] = $row;
+        }
+        $_SESSION["roles"] = $roles;
+
+        //get groups
+        $sql = "select id_groups, gruppi.nome from gusers, gruppi   where id_persona = $uid and gruppi.id = gusers.id_groups";
+        $result = $conn->query($sql);
+        $groups = array();
+        while($row = $result->fetch_assoc()) {
+            $groups[] = $row;
+        }
+        $_SESSION["groups"] = $groups;
+
+        //get group where user is leader
+        $sql = "select id_gruppo, gruppi.nome from cgruppi, gruppi   where id_persona = $uid and gruppi.id = cgruppi.id_gruppo";
+        $result = $conn->query($sql);
+        $cgroups = array();
+        while($row = $result->fetch_assoc()) {
+            $cgroups[] = $row;
+            $parentid = $row["id_gruppo"];
+
+            $sql = "select  id as id_gruppo, nome, parent  from    (select * from gruppi order by parent, id) products_sorted, (select @pv := '$parentid') initialisation where   find_in_set(parent , @pv)and     length(@pv := concat(@pv, ',', id))";
+            $result2 = $conn->query($sql);
+            while($row2 = $result2->fetch_assoc()) {
+                $cgroups[] = $row2;
+            }
+
+        }
+        $_SESSION["cgroups"] = $cgroups;
+
+
+        $out["session"] = $_SESSION;
         echo json_encode($out);
+        $conn->close();
         exit(0);
     }
     else{
         $out["status"]["code"] = 102;
         $out["status"]["message"] = "Login Error";
         echo json_encode($out);
+        $conn->close();
         exit(0);
     }
 }
 
 
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-// Check connection
-if ($conn->connect_error) {
-    $out["status"]["message"] = "Connection failed: " . $conn->connect_error;
-    $out["status"]["code"] = 9000;
-    print json_encode($out); 
-    $conn->close();
-    exit(1);
-}
+
 
 
 

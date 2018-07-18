@@ -8,8 +8,8 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-
-$cmd = $_POST["cmd"];
+$VARS = array_merge($_POST, $_GET);
+$cmd = $VARS["cmd"];
 
 if($cmd == "update"){
 
@@ -37,6 +37,20 @@ else if($cmd == "delete"){
         $out['status'] = "Error delete  project: " . $conn->error;
     
     }
+}
+
+
+else if($cmd == "autocomplete"){
+    $term  = $VARS["term"];
+    
+    $sql = "select  concat(cdc, ' ', acronimo) as label , id as value from progetti where cdc like '$term%' or acronimo like '$term%'";
+    $result = $conn->query($sql);
+    $out=array();
+    while($r = $result->fetch_assoc()) {
+        $out[] = $r;
+    }
+
+
 }
 
 else if($cmd == "newproject"){

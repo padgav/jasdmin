@@ -90,6 +90,7 @@ $(document).ready(function () {
     document.getElementById("crs4personalelink").addEventListener("click", function(e){
         $("#crs4budget").hide();
         $("#crs4timecard").hide();
+        $("#crs4acquisti").hide();
         $("#crs4personale").show();
         var personale = new JasdminHr("crs4personalebody", "crs4personaleaggiungi", "crs4personaleaggiungibutton");
     })
@@ -97,8 +98,17 @@ $(document).ready(function () {
     document.getElementById("crs4timecardlink").addEventListener("click", function(e){
         $("#crs4budget").hide();
         $("#crs4personale").hide();
+        $("#crs4acquisti").hide();
         $("#crs4timecard").show();
         var personale = new JasdminHr("crs4personalebody", "crs4personaleaggiungi", "crs4personaleaggiungibutton");
+    })
+
+    document.getElementById("crs4acquistilink").addEventListener("click", function(e){
+        $("#crs4budget").hide();
+        $("#crs4personale").hide();
+        $("#crs4timecard").hide();
+        $("#crs4acquisti").show();
+        var personale = new JasdminAcquisti();
     })
 
 
