@@ -73,7 +73,7 @@ if($cmd == "login"){
         $result = $conn->query($sql);
         $data = array();
         while($row = $result->fetch_assoc()) {
-            $data[] = $row;
+            $data[] = $row["id"];
         }
         $_SESSION["projects"] = $data;
 
@@ -89,7 +89,7 @@ if($cmd == "login"){
         $result = $conn->query($sql);
         $roles = array();
         while($row = $result->fetch_assoc()) {
-            $roles[] = $row;
+            $roles[] = $row["id_ruolo"];
         }
         $_SESSION["roles"] = $roles;
 
@@ -107,13 +107,13 @@ if($cmd == "login"){
         $result = $conn->query($sql);
         $cgroups = array();
         while($row = $result->fetch_assoc()) {
-            $cgroups[] = $row;
+            $cgroups[] = $row["id_gruppo"];
             $parentid = $row["id_gruppo"];
 
             $sql = "select  id as id_gruppo, nome, parent  from    (select * from gruppi order by parent, id) products_sorted, (select @pv := '$parentid') initialisation where   find_in_set(parent , @pv)and     length(@pv := concat(@pv, ',', id))";
             $result2 = $conn->query($sql);
             while($row2 = $result2->fetch_assoc()) {
-                $cgroups[] = $row2;
+                $cgroups[] = $row2["id_gruppo"];
             }
 
         }

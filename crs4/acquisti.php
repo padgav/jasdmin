@@ -6,6 +6,7 @@ error_reporting(E_ERROR | E_PARSE);
 
 session_start();
 $uid = $_SESSION["uidnumber"];
+$guid = $_SESSION["groups"][0]["id_groups"];
 
 
 
@@ -23,11 +24,22 @@ if ($conn->connect_error) {
 }
 
 
+$myroles = implode("," , $_SESSION["roles"]);
+
+$mytasks = array();
+$sql = "select step from tasks where id_procedura=1 and id_ruolo in ($myroles)";
+echo $sql;
+$result = $conn->query($sql);
+while($row = $result->fetch_assoc()) {
+    $mytasks[] = $row["step"];
+}
+
 
 if($cmd == "new"){
 
     $id_progetto = $VARS["id_progetto"];
-    $sql = "insert into acquisti (id_persona, id_progetto) values($uid, $id_progetto)";
+
+    $sql = "insert into acquisti (id_persona, id_gruppo, id_progetto) values($uid, $guid, $id_progetto)";
     $result = $conn->query($sql);
     if($result === FALSE) {
         $out["status"]["code"] = 9001;
@@ -113,9 +125,20 @@ elseif($cmd==="sum"){
 
 elseif($cmd==="selectAll"){
 
+    for($i=0; $i < sizeof($mytasks); $i++){
+        $task = $mytasks[$i];
+
+        $uid = $_SESSION["uidnumber"];
+        $cprojects = implode(",", $_SESSION["projects"]);
+        $cgroups = implode(",", $_SESSION["cgroups"]);
+        if($task == 0) $where0 = "id_persona = $uid";
+        if($task == 1) $where1 = "(id_progetto IN ($cprojects) AND inviata=1)";
+        if($task == 2) $where2 = "(id_progetto IN ($cgroups) and inviata=2)";
+    }
+
     $inviata = $VARS["inviata"];
     $where = "";
-    if(isset($inviata)) $where = " where inviata=$inviata";
+    if(isset($inviata)) $where = " where $where0 OR $where1 OR $where2";
 
 
 
