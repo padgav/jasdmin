@@ -28,7 +28,7 @@ $myroles = implode("," , $_SESSION["roles"]);
 
 $mytasks = array();
 $sql = "select step from tasks where id_procedura=1 and id_ruolo in ($myroles)";
-echo $sql;
+//echo $sql;
 $result = $conn->query($sql);
 while($row = $result->fetch_assoc()) {
     $mytasks[] = $row["step"];
@@ -142,8 +142,8 @@ elseif($cmd==="selectAll"){
 
 
 
-    $sql ="select acquisti.*, progetti.acronimo , progetti.cdc, persone.nome, persone.cognome , acquisti.costo*acquisti.quantita as tot from acquisti inner join progetti on progetti.id = acquisti.id_progetto inner join persone on persone.ldap=acquisti.id_persona" . $where;
-    //$sql = "select * from acquisti $where";
+    $sql ="select acquisti.*, progetti.acronimo , progetti.cdc, persone.nome, persone.cognome , acquisti.costo*acquisti.quantita as tot from acquisti inner join progetti on progetti.id = acquisti.id_progetto inner join persone on persone.ldap=acquisti.id_persona" ;
+    //$sql = "select * from acquisti";
     $data = array();
     $result = $conn->query($sql);
     
